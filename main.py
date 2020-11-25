@@ -92,7 +92,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
         '''preloaded'''
         self.scale_factor = 1.0
-        #self.is_fittoframe = False
         self.input_image = None
         self.output_image = None
 
@@ -111,10 +110,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         # print(filename)
         print(file_path)
         if file_path != '' and file_path != None:
-            #self.path = image_path
-            #self.cv_image = cv2.imread(image_path)
-            #self.backup_image = QtGui.QPixmap(self.convertMatToQImage(self.cv_image))
-            #self.showImage(self.lbl_input, self.cv_image)
             self.input_image = QtGui.QPixmap(file_path)
             self.lbl_input.setPixmap(self.input_image)
             self.resizeImage()
@@ -130,23 +125,26 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                 return
             self.lbl_output.pixmap().save(file_path)
 
-    def showImage(self, label: QtWidgets.QLabel, cv_img=None):
-        if cv_img is not None:
-            image = self.convertMatToQImage(cv_img)
-            image = QtGui.QPixmap(image)
-            label.setPixmap(image)
-        else:
-            print("Warning: self.cv_image is empty.")
+    # def showImage(self, label: QtWidgets.QLabel, cv_img=None):
+    #     if cv_img is not None:
+    #         image = self.convertMatToQImage(cv_img)
+    #         image = QtGui.QPixmap(image)
+    #         label.setPixmap(image)
+    #     else:
+    #         print("Warning: self.cv_image is empty.")
 
     def resizeEvent(self, a0: QtGui.QResizeEvent):
+        '''
+        Khi resize MainWindow, sự kiện này cập nhật lại size của image
+        '''
         self.resizeImage()
-        #self.update()
 
     def resizeImage(self):
+        '''
+        resize image để nó fit cái vùng chứa ảnh (scrollarea)
+        '''
         if self.input_image is not None:
             if self.checkbox_fit.isChecked():
-                #width = min(self.input_image.width(), self.scrollarea_input.width()-21)
-                #height = min(self.input_image.height(), self.scrollarea_input.height()-10)
                 width = self.scrollarea_input.width()-21
                 height = self.scrollarea_input.height()-10
                 self.lbl_input.setPixmap(self.input_image.scaled(width, height, QtCore.Qt.KeepAspectRatio))
@@ -155,6 +153,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
                     self.lbl_output.setPixmap(self.output_image.scaled(width,height,QtCore.Qt.KeepAspectRatio))
 
     def resetImage(self):
+        '''
+        Hiển thị image đúng với kích thước thật
+        '''
         if self.input_image is not None:
             self.lbl_input.setPixmap(self.input_image)
             if self.output_image is not None:
@@ -168,6 +169,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def pyxelate(self):
         if self.input_image is not None:
+            # Sử dụng kích thước đã được resize khi "use fitted size" được tick
+            # Optimize runtime
             if self.checkbox_usefittedsize.isChecked():
                 img = self.convertQImageToMat(self.lbl_input.pixmap())
             else:
@@ -186,6 +189,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             p = Pyxelate(height // factor, width // factor, colors, dither)
             img_small = p.convert(img)  # convert an image with these settings
 
+            #Đổi từ Ndarray -> QImage
+            #Sau đó lấy QPixmap từ QImage để hiển thị lên lbl_output
             qimage = self.convertMatToQImage(img_small)
             self.output_image = QtGui.QPixmap.fromImage(qimage)
             self.lbl_output.setPixmap(self.output_image)
@@ -199,6 +204,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             pass
 
     def convertMatToQImage(self, mat: np.ndarray=None):
+        '''
+        Đổi từ ndarray -> QImage
+        Nếu dùng OpenCV thì shape màu là BGR
+        '''
         if mat is not None:
             height, width = mat.shape[:2]
             bytes_per_line = 3 * width
@@ -206,7 +215,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             return image
 
     def convertQImageToMat(self, pixmap = None):
-        '''  Converts a QImage into an opencv MAT format  '''
+        '''
+        Đổi từ QImage thành ndarray
+        '''
         if pixmap is not None:
             if type(pixmap) is QtGui.QPixmap:
                 new_qimage = pixmap.toImage().convertToFormat(QtGui.QImage.Format_RGBA8888)
