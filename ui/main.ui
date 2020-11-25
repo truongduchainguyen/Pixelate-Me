@@ -37,7 +37,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btn_apply">
+       <widget class="QPushButton" name="btn_pyxelate">
         <property name="minimumSize">
          <size>
           <width>75</width>
@@ -45,7 +45,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Apply</string>
+         <string>Pyxelate</string>
         </property>
        </widget>
       </item>
@@ -1029,8 +1029,11 @@
             <property name="text">
              <string>input_image</string>
             </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -1962,7 +1965,7 @@
              <string>output_image</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             <set>Qt::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -2012,6 +2015,66 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_fit">
+        <property name="text">
+         <string>Fit to Frame</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSlider" name="hslider_zoom">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="minimum">
+         <number>40</number>
+        </property>
+        <property name="maximum">
+         <number>400</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+        <property name="invertedControls">
+         <bool>false</bool>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TicksAbove</enum>
+        </property>
+        <property name="tickInterval">
+         <number>20</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinbox_zoom">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="suffix">
+         <string>%</string>
+        </property>
+        <property name="minimum">
+         <number>40</number>
+        </property>
+        <property name="maximum">
+         <number>400</number>
+        </property>
+        <property name="value">
+         <number>100</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>
@@ -2068,7 +2131,7 @@
  </widget>
  <tabstops>
   <tabstop>btn_open</tabstop>
-  <tabstop>btn_apply</tabstop>
+  <tabstop>btn_pyxelate</tabstop>
   <tabstop>spinbox_factor</tabstop>
   <tabstop>spinbox_color</tabstop>
   <tabstop>checkbox_dither</tabstop>
@@ -2092,6 +2155,38 @@
     <hint type="destinationlabel">
      <x>319</x>
      <y>239</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hslider_zoom</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinbox_zoom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>549</x>
+     <y>437</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>620</x>
+     <y>439</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinbox_zoom</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>hslider_zoom</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>613</x>
+     <y>432</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>494</x>
+     <y>435</y>
     </hint>
    </hints>
   </connection>
