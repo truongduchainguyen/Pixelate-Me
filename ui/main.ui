@@ -2017,9 +2017,22 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="btn_fit">
+       <widget class="QCheckBox" name="checkbox_fit">
         <property name="text">
          <string>Fit to Frame</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkbox_usefittedsize">
+        <property name="text">
+         <string>Use Fitted Size</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
