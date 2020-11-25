@@ -45,6 +45,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         # self.checkbox_ : QtWidgets.QCheckBox = self.findChild(QtWidgets.QCheckBox, 'checkbox_')
         self.checkbox_dither: QtWidgets.QCheckBox = self.findChild(QtWidgets.QCheckBox, 'checkbox_dither')
         self.checkbox_fit: QtWidgets.QCheckBox = self.findChild(QtWidgets.QCheckBox, 'checkbox_fit')
+        self.checkbox_usefittedsize: QtWidgets.QCheckBox = self.findChild(QtWidgets.QCheckBox, 'checkbox_usefittedsize')
+
         # spinboxes
         self.spinbox_factor: QtWidgets.QSpinBox = self.findChild(QtWidgets.QSpinBox, 'spinbox_factor')
         self.spinbox_color: QtWidgets.QSpinBox = self.findChild(QtWidgets.QSpinBox, 'spinbox_color')
@@ -71,7 +73,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         # self.btn_pyxelate.clicked.connect(self.test_combobox)
         self.btn_open.clicked.connect(self.openImage)
         self.btn_pyxelate.clicked.connect(self.pyxelate)
+
+        # checkboxes
         self.checkbox_fit.clicked.connect(self.switchView)
+        #self.checkbox_usefittedsize.clicked.connect()
 
 
         # spinboxes
@@ -163,7 +168,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
     def pyxelate(self):
         if self.input_image is not None:
-            img = self.convertQImageToMat(self.input_image)
+            if self.checkbox_usefittedsize.isChecked():
+                img = self.convertQImageToMat(self.lbl_input.pixmap())
+            else:
+                img = self.convertQImageToMat(self.input_image)
 
             # generate pixel art that is 1/14 the size
 
