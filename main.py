@@ -140,8 +140,10 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
     def resizeImage(self):
         if self.input_image is not None:
             if self.checkbox_fit.isChecked():
-                width = min(self.input_image.width(), self.scrollarea_input.width()-21)
-                height = min(self.input_image.height(), self.scrollarea_input.height()-10)
+                #width = min(self.input_image.width(), self.scrollarea_input.width()-21)
+                #height = min(self.input_image.height(), self.scrollarea_input.height()-10)
+                width = self.scrollarea_input.width()-21
+                height = self.scrollarea_input.height()-10
                 self.lbl_input.setPixmap(self.input_image.scaled(width, height, QtCore.Qt.KeepAspectRatio))
                 print(width, height)
                 if self.output_image is not None:
