@@ -11,6 +11,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         uic.loadUi('ui/main.ui', self)
+        
+        
 
         '''Find Children'''
         # layouts
