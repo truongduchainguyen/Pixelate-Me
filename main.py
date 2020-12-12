@@ -16,6 +16,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
         uic.loadUi('ui/main.ui', self)
         
+        # ẩn phần dư của main windown chỉ để hiện background
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint) #| QtCore.Qt.WindowStaysOnTopHint)
 
