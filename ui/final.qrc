@@ -1,0 +1,32 @@
+<RCC>
+  <qresource prefix="background">
+    <file>background.png</file>
+  </qresource>
+  <qresource prefix="factors">
+    <file>factors.png</file>
+  </qresource>
+  <qresource prefix="colors">
+    <file>colors.PNG</file>
+  </qresource>
+  <qresource prefix="dither">
+    <file>dither.PNG</file>
+  </qresource>
+  <qresource prefix="fit_to_frame">
+    <file>fit_to_frame.png</file>
+  </qresource>
+  <qresource prefix="use_fitted">
+    <file>use_fitted_size.png</file>
+  </qresource>
+  <qresource prefix="O">
+    <file>O.png</file>
+  </qresource>
+  <qresource prefix="P">
+    <file>P.png</file>
+  </qresource>
+  <qresource prefix="S">
+    <file>S.png</file>
+  </qresource>
+  <qresource prefix="E">
+    <file>E.png</file>
+  </qresource>
+</RCC>

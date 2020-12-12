@@ -5,6 +5,10 @@ from skimage import io
 import matplotlib.pyplot as plt
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5.QtCore import Qt
+import final
+from PyQt5.QtWidgets import QMainWindow, QLabel
+from PyQt5.QtWidgets import QGridLayout, QWidget, QDesktopWidget
 
 class Ui_MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -12,14 +16,33 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
 
         uic.loadUi('ui/main.ui', self)
         
-        
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint) #| QtCore.Qt.WindowStaysOnTopHint)
+
+        # cho hiển thị giữa màn hình
+        qtRectangle = self.frameGeometry()
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
+
 
         '''Find Children'''
+
+         # ui
+        self.lbl_background: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_background')
+        self.frame: QtWidgets.QFrame = self.findChild(QtWidgets.QFrame, 'frame')
+        self.lbl_dither: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_dither')
+        self.lbl_factor: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_factor')
+        self.lbl_color: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_color')
+        self.lbl_fit_to_frame: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_fit_to_frame')
+        self.lbl_use_fitted: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_use_fitted')
+        
+
         # layouts
         # self.layout_: QtWidgets.QLayout = self.findChild(QtWidgets.QLayout, 'layout_')
-        self.hlayout_top: QtWidgets.QLayout = self.findChild(QtWidgets.QLayout, 'hlayout_top')
-        self.hlayout_body: QtWidgets.QLayout = self.findChild(QtWidgets.QLayout, 'hlayout_body')
-        self.hlayout_bottom: QtWidgets.QLayout = self.findChild(QtWidgets.QLayout, 'hlayout_bottom')
+        # self.hlayout_top: QtWidgets.QLayout = self.findChild(QtWidgets.QLayout, 'hlayout_top')
+        # self.hlayout_body: QtWidgets.QLayout = self.findChild(QtWidgets.QLayout, 'hlayout_body')
+        # self.hlayout_bottom: QtWidgets.QLayout = self.findChild(QtWidgets.QLayout, 'hlayout_bottom')
 
         # Scrollareas
         self.scrollarea_input: QtWidgets.QScrollArea = self.findChild(QtWidgets.QScrollArea, 'scrollarea_input')
@@ -29,15 +52,16 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         # self.lbl_: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_')
         self.lbl_input: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_input')
         self.lbl_output: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_output')
-        self.lbl_factor: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_factor')
-        self.lbl_color: QtWidgets.QLabel = self.findChild(QtWidgets.QLabel, 'lbl_color')
+        
 
         # buttons
         # self.btn_: QtWidgets.QPushButton = self.findChild(QtWidgets.QPushButton, 'btn_') #use this for template
         self.btn_open: QtWidgets.QPushButton = self.findChild(QtWidgets.QPushButton, 'btn_open')
         self.btn_pyxelate: QtWidgets.QPushButton = self.findChild(QtWidgets.QPushButton, 'btn_pyxelate')
-        self.btn_adjustment: QtWidgets.QPushButton = self.findChild(QtWidgets.QPushButton, 'btn_adjustment')
-        self.btn_effect: QtWidgets.QPushButton = self.findChild(QtWidgets.QPushButton, 'btn_effect')
+        self.btn_save: QtWidgets.QPushButton = self.findChild(QtWidgets.QPushButton, 'btn_save')
+        self.btn_exit: QtWidgets.QPushButton = self.findChild(QtWidgets.QPushButton, 'btn_exit')
+        # self.btn_adjustment: QtWidgets.QPushButton = self.findChild(QtWidgets.QPushButton, 'btn_adjustment')
+        # self.btn_effect: QtWidgets.QPushButton = self.findChild(QtWidgets.QPushButton, 'btn_effect')
 
 
         # self.menuFile = self.findChild(QtWidgets.)
@@ -58,9 +82,9 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.hslider_zoom: QtWidgets.QSlider = self.findChild(QtWidgets.QSlider, 'hslider_zoom')
 
         # actions
-        self.actionOpen: QtWidgets.QAction = self.findChild(QtWidgets.QAction, 'actionOpen')
-        self.actionSave: QtWidgets.QAction = self.findChild(QtWidgets.QAction, 'actionSave')
-        self.actionExit: QtWidgets.QAction = self.findChild(QtWidgets.QAction, 'actionExit')
+        # self.actionOpen: QtWidgets.QAction = self.findChild(QtWidgets.QAction, 'actionOpen')
+        # self.actionSave: QtWidgets.QAction = self.findChild(QtWidgets.QAction, 'actionSave')
+        # self.actionExit: QtWidgets.QAction = self.findChild(QtWidgets.QAction, 'actionExit')
         '''end findChildren'''
 
         '''Connection'''
@@ -68,19 +92,22 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         # self.btn_.clicked.connect(lambda: self.isClicked('btn_'))
         self.btn_open.clicked.connect(lambda: self.isClicked('open'))
         self.btn_pyxelate.clicked.connect(lambda: self.isClicked('apply'))
-        self.btn_adjustment.clicked.connect(lambda: self.isClicked('adjustments'))
-        self.btn_effect.clicked.connect(lambda: self.isClicked('effects'))
+        self.btn_save.clicked.connect(lambda: self.isClicked('save'))
+        self.btn_exit.clicked.connect(lambda: self.isClicked('exit'))
+        # self.btn_adjustment.clicked.connect(lambda: self.isClicked('adjustments'))
+        # self.btn_effect.clicked.connect(lambda: self.isClicked('effects'))
 
         # buttons
         # self.btn_pyxelate.clicked.connect(self.test_combobox)
         self.btn_open.clicked.connect(self.openImage)
         self.btn_pyxelate.clicked.connect(self.pyxelate)
+        self.btn_save.clicked.connect(self.saveImage)
+        self.btn_exit.clicked.connect(self.close)
 
         # checkboxes
         self.checkbox_fit.clicked.connect(self.switchView)
         #self.checkbox_usefittedsize.clicked.connect()
-
-
+    
         # spinboxes
         #self.spinbox_zoom.valueChanged.connect(lambda: self.scaleImage(self.spinbox_zoom.value()/100))
 
@@ -88,8 +115,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         #self.hslider_zoom.valueChanged.connect(lambda: self.scaleImage(self.hslider_zoom.value()/100))
 
         # actions
-        self.actionOpen.triggered.connect(self.openImage)
-        self.actionSave.triggered.connect(self.saveImage)
+        # self.actionOpen.triggered.connect(self.openImage)
+        # self.actionSave.triggered.connect(self.saveImage)
         '''end Connection'''
 
         '''preloaded'''
@@ -98,6 +125,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.output_image = None
 
         self.show()
+
 
     def isClicked(self, obj: str):
         '''
@@ -126,6 +154,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             if file_path == "":
                 return
             self.lbl_output.pixmap().save(file_path)
+
+
 
     # def showImage(self, label: QtWidgets.QLabel, cv_img=None):
     #     if cv_img is not None:
